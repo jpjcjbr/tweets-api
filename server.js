@@ -37,4 +37,4 @@ app.get('/tweet-count-by-hour', function (req, res) {
 })
  
 app.listen(port)
-console.log("Tweets-api started on port " + port)
+console.log("Tweets-api application started on port " + port)
