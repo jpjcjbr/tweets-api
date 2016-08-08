@@ -1,0 +1,20 @@
+sudo: required
+services:
+  - docker
+language: node_js
+node_js:
+  - "6"
+env:
+  global:
+    - secure: "dAua5UXhNWzG8DxKWRnQxFeuPFlX/XfCwQQvG2RUxXYrCRRNpw2tdhIOTgzHrD1UcleU3K8oFSJPqVDnNTK8skbHAR9U5QXDyCTUiMYmwILdeA4vSVoj/WMKfHgXTfUNB/qfWyKbJsaKn/zdotoE+7tzZ1v/Gu0HHkDef71LrQlx6S0OdZ+YPny5gNOHOv7gqLr4pcMq5MWkS/Bz+cNOFOA0Devx3nw4nn0Jk35TkFGY6hT4kb4o+5NU1NYLKyn2BTDzAnc7+P8BIBnAT3cYHk2+l3f4ILNOWquMtksxH1hYY1lMi2gLneepKs4VipUmgGlmXJvkr8eytUDNBkw8vMZ+yZPsNBlFqfyW01sxESZVbNnZtrSY36U+vDoVjglJ6sTCdB5vqO+mpnWHDrHV0sBSx36wDW3N0/BM98JCkMHL+SnhCsHOdwWIfSJ/QBiMhzlZ5J/KJr8+8qsgvc2iX771NVRPCGsb9WUhEO71vwd7zgPy2RnEvg2cOeQi5drqbfR7dUoaXuJv4X6Ix0BU9DaOmxcXPrlHm079uVJNGCmSVT2MmB9QkboYokGesnxHnemrD+vljSAOet2UoLK5DVc76o6NfieAxXL6WXtYr0iu979JCdY49wLpRdgeJyewTXjvv/JwuK3VMsf4B72FSJlPBQNrdw7ykuDVzMItixE=" # DOCKER_EMAIL
+    - secure: "U164yvk5z9qZeain2cyAy3dUu2Fafvbelowr3pVRKIdsj4IALtG8fgPf7AKMxQz7IDoGKHJhZO2x/bKDbrRoFQugvyQZHBnSKViN6IVXNmtzki1etmK88/Aplq9qvzZZvwxXx8ijB4QnpV1cdB9vtU42fEzRn9qr1M7NX3qoDtrAWQtRggMpOV0ILD2tAzWhTTTWM4lenliInfmRNlmS+X9KJxeM12eeSbdlUGGe+GeMUWxFFIUQ+r55vfyOJ6rvNuZjfy4T6mk/QMyQmK1CNeEVswzN86HqoE8mLWwfNJF1Bu9PRpHcwgbP69KYYOvtHl6CCDbh3UJW/3d64n79kzYT5TXWs7DVB33eXvAaTe+2Xy3qPCf80NfLkMwhlpcEqsv/Pf2b0skAKAldkQNXcTemwCWCV6sDc3F6x7QoiEXTJ3Qk9ygGUVP3SPEFnIdOoEacyXiIDfndqgsUMPNMz9nae0EHFEgxVGpJ7oamVeeT7NpMmoaBeSJfqnL+kUGVEcnUTtL1xV4Mf+JXMxmGkO4s92s2ZkmOGRDIgKKd52CzfvLaj8iYiNhdQocWPSwL6OdG1oGRHRJXByHji6u3fioC9gEvgYsw0sEUjaWRfAK7lLG1A+4ala1/KLEPBqC8A4LnjNLCYiL7WzX09PVOnzOuP/y8YzCMGvIM1bUMd4E=" # DOCKER_USER
+    - secure: "oobJaAoQ6vZJ7CDwbjWGVQxibPtCDflSV2YkCFc7wVEDPeqz3eVwIv4FM0IHjrmVOGkEsp6/gWL4R4sFqJYXFd5KCX8tZfneIiBKtx7n1O01RUJGGD2uKewL/UR0zUDsRJ8mUcvfZ+0bpduzyMJ3f4NP1rGomXUdnNknldN+nr4qkwQybCT/h4bBk/DU/PejkuXovJjNz1sWCTCLx+ea3vkx+SAa0SyBK55IEiGW/9mDpCEGEQwtsOvzZVSucaK2tVgkH/G8ySFIT9uqdVSJ4M4P7z5yOkdKW0p9H8STQ6beDNdvS0lWQ+WOOlLCaj3Eh1vSSlcZmuS1MpOVOsF6pNrapdh0hgX66JFxHeLtK8IH561IaQYN+AQtbrS+blPlF89pb7jbGn+tVHA0QTQlczwJSWp5Vr4J9ixyPJJfpRZcfhMS3s/BFjP6rdYttiWK8lYZ6ukCMAPCftZObhZXzxsSy5cA7px0exJ4oCGgZhti8r6B9gzht9yDQCGsQyRT9OCk2QriYnefELRDed+65eMweJs5OGiNrBR107DOF9GUvaiGN6CcNnNcFidWu7Ma/uVz+mQWbhPr2kt6rc6hN4nIOHxWEYJMchNF/IcoP1AyU6JV0RtMEQcvRbTki9RXSEDb7EtZtD5bKkWYIZ8xbsbEl5YNpfWH2efWAUapXwg=" # DOCKER_PASS
+    - COMMIT=${TRAVIS_COMMIT::8}
+after_success:
+  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  - export REPO=jpjcjbr/tweet-summarizer
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+  - docker build -f Dockerfile -t $REPO:$COMMIT .
+  - docker tag $REPO:$COMMIT $REPO:$TAG
+  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+  - docker push $REPO
