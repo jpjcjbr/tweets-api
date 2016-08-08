@@ -4,7 +4,7 @@ var request = require('request')
 var app = express()
  
 app.get('/top-users', function (req, res) {
-  request('http://localhost:8080/tweets/top-users', function (error, response, body) {
+  request('http://tweet-collector:8080/tweets/top-users', function (error, response, body) {
 	  if (!error && response.statusCode == 200) {
 	  	res.end(response.body)
 	  } else {
@@ -15,7 +15,7 @@ app.get('/top-users', function (req, res) {
 })
 
 app.get('/tweet-count-by-hashtag-and-language', function (req, res) {
-  request('http://localhost:8080/tweets/tweet-count-by-hashtag-and-language', function (error, response, body) {
+  request('http://tweet-collector:8080/tweets/tweet-count-by-hashtag-and-language', function (error, response, body) {
 	  if (!error && response.statusCode == 200) {
 	  	res.end(response.body)
 	  } else {
@@ -26,7 +26,7 @@ app.get('/tweet-count-by-hashtag-and-language', function (req, res) {
 })
 
 app.get('/tweet-count-by-hour', function (req, res) {
-  request('http://localhost:8080/tweets/tweet-count-by-hour', function (error, response, body) {
+  request('http://tweet-collector:8080/tweets/tweet-count-by-hour', function (error, response, body) {
 	  if (!error && response.statusCode == 200) {
 	  	res.end(response.body)
 	  } else {
